@@ -1,0 +1,354 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pepperdash.com/schemas/epi-wyrestorm-networkHD/nhd-150-rx.schema.json",
+  "title": "nhd-150-rx",
+  "description": "Device config entry for a device of type \"nhd-150-rx\". Properties object for a device of type \"nhd-150-rx\" (also \"nhd150rx\") - a WyreStorm NetworkHD multiview decoder - backed by NhdDeviceProperties (NhdDeviceProperties.cs). This class is shared by all NHD device roles; fields most relevant to a decoder are alias, customMultiviewLayouts, multiviewPresets, and maxTileCount.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Unique identifier for this device within the configuration file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Friendly display name for this device."
+    },
+    "type": {
+      "const": "nhd-150-rx",
+      "description": "Discriminator identifying the plugin factory that instantiates this device."
+    },
+    "properties": {
+      "$ref": "#/$defs/properties",
+      "description": "Properties object for a device of type \"nhd-150-rx\" (also \"nhd150rx\") - a WyreStorm NetworkHD multiview decoder - backed by NhdDeviceProperties (NhdDeviceProperties.cs). This class is shared by all NHD device roles; fields most relevant to a decoder are alias, customMultiviewLayouts, multiviewPresets, and maxTileCount."
+    }
+  },
+  "required": [
+    "key",
+    "name",
+    "type",
+    "properties"
+  ],
+  "$defs": {
+    "properties": {
+      "type": "object",
+      "properties": {
+        "control": {
+          "$ref": "#/$defs/control"
+        },
+        "matrixInputSlot": {
+          "type": "integer",
+          "description": "Not typically used for the decoder role."
+        },
+        "matrixOutputSlot": {
+          "type": "integer",
+          "description": "Not typically used for the decoder role."
+        },
+        "alias": {
+          "type": "string",
+          "description": "Friendly alias for this decoder (matches the WyreStorm device name/trueName, e.g. \"RX-DIS-Judge\")."
+        },
+        "rs232": {
+          "$ref": "#/$defs/rs232"
+        },
+        "apiUsername": {
+          "type": "string"
+        },
+        "apiPassword": {
+          "type": "string"
+        },
+        "mode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Transmitter",
+            "Receiver",
+            "Transceiver",
+            null
+          ],
+          "description": "Only used by devices that support multiple modes via configuration; fixed-role decoders hardcode this."
+        },
+        "customMultiviewLayouts": {
+          "type": "array",
+          "description": "Named custom multiview geometry profiles usable by this decoder.",
+          "items": {
+            "$ref": "#/$defs/customMultiviewLayout"
+          }
+        },
+        "multiviewPresets": {
+          "type": "array",
+          "description": "Named multiview presets (either a controller scene name or a config-defined custom layout) plus optional window-to-TX routing.",
+          "items": {
+            "$ref": "#/$defs/multiviewPreset"
+          }
+        },
+        "maxTileCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Maximum number of multiview tile-sink child devices to create for this decoder. Defaults to the device's MaxStreamCount (e.g. 9 for NHD-150-RX) when not set. Values greater than MaxStreamCount are clamped down to it."
+        }
+      }
+    },
+    "control": {
+      "type": "object",
+      "description": "Standard Essentials communication control block.",
+      "properties": {
+        "method": {
+          "type": "string",
+          "pattern": "^(?:[nN][oO][nN][eE]|[cC][oO][mM]|[iI][pP][iI][dD]|[iI][pP][iI][dD][tT][cC][pP]|[iI][rR]|[sS][sS][hH]|[tT][cC][pP][iI][pP]|[tT][eE][lL][nN][eE][tT]|[cC][rR][eE][sS][nN][eE][tT]|[cC][eE][cC]|[uU][dD][pP]|[hH][tT][tT][pP]|[hH][tT][tT][pP][sS]|[wW][sS]|[wW][sS][sS]|[sS][eE][cC][uU][rR][eE][tT][cC][pP][iI][pP]|[cC][oO][mM][bB][rR][iI][dD][gG][eE]|[iI][nN][fF][iI][nN][eE][tT][eE][xX])(?:\\s*,\\s*(?:[nN][oO][nN][eE]|[cC][oO][mM]|[iI][pP][iI][dD]|[iI][pP][iI][dD][tT][cC][pP]|[iI][rR]|[sS][sS][hH]|[tT][cC][pP][iI][pP]|[tT][eE][lL][nN][eE][tT]|[cC][rR][eE][sS][nN][eE][tT]|[cC][eE][cC]|[uU][dD][pP]|[hH][tT][tT][pP]|[hH][tT][tT][pP][sS]|[wW][sS]|[wW][sS][sS]|[sS][eE][cC][uU][rR][eE][tT][cC][pP][iI][pP]|[cC][oO][mM][bB][rR][iI][dD][gG][eE]|[iI][nN][fF][iI][nN][eE][tT][eE][xX]))*$",
+          "description": "Case-insensitive."
+        },
+        "tcpSshProperties": {
+          "$ref": "#/$defs/tcpSshProperties"
+        }
+      },
+      "required": [
+        "method",
+        "tcpSshProperties"
+      ]
+    },
+    "tcpSshProperties": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "autoReconnect": {
+          "type": "boolean",
+          "default": true
+        },
+        "autoReconnectIntervalMs": {
+          "type": "integer",
+          "default": 5000
+        }
+      },
+      "required": [
+        "address",
+        "port"
+      ]
+    },
+    "rs232": {
+      "type": "object",
+      "description": "RS-232 pass-through settings for this NHD unit.",
+      "properties": {
+        "baudRate": {
+          "type": "integer",
+          "enum": [
+            2400,
+            4800,
+            9600,
+            19200,
+            38400,
+            57600,
+            115200
+          ],
+          "default": 9600
+        },
+        "dataBits": {
+          "type": "string",
+          "default": "Eight",
+          "pattern": "^(?:[sS][iI][xX]|[sS][eE][vV][eE][nN]|[eE][iI][gG][hH][tT])(?:\\s*,\\s*(?:[sS][iI][xX]|[sS][eE][vV][eE][nN]|[eE][iI][gG][hH][tT]))*$",
+          "description": "Case-insensitive."
+        },
+        "parity": {
+          "type": "string",
+          "default": "None",
+          "pattern": "^(?:[nN][oO][nN][eE]|[oO][dD][dD]|[eE][vV][eE][nN])(?:\\s*,\\s*(?:[nN][oO][nN][eE]|[oO][dD][dD]|[eE][vV][eE][nN]))*$",
+          "description": "Case-insensitive."
+        },
+        "stopBits": {
+          "type": "string",
+          "default": "One",
+          "pattern": "^(?:[oO][nN][eE]|[tT][wW][oO])(?:\\s*,\\s*(?:[oO][nN][eE]|[tT][wW][oO]))*$",
+          "description": "Case-insensitive."
+        },
+        "appendCr": {
+          "type": "boolean"
+        },
+        "appendLf": {
+          "type": "boolean"
+        },
+        "sendAsHex": {
+          "type": "boolean"
+        }
+      }
+    },
+    "customMultiviewLayout": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Unique layout key used by client code to select this geometry profile."
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string",
+          "default": "Tile",
+          "pattern": "^(?:[tT][iI][lL][eE]|[oO][vV][eE][rR][lL][aA][yY])(?:\\s*,\\s*(?:[tT][iI][lL][eE]|[oO][vV][eE][rR][lL][aA][yY]))*$",
+          "description": "Case-insensitive."
+        },
+        "canvasWidth": {
+          "type": "integer",
+          "default": 1920
+        },
+        "canvasHeight": {
+          "type": "integer",
+          "default": 1080
+        },
+        "audioMode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Unknown",
+            "Window",
+            "Separate",
+            "NoChange",
+            null
+          ]
+        },
+        "audioWindowReference": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "windows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/customMultiviewWindow"
+          }
+        }
+      },
+      "required": [
+        "key"
+      ]
+    },
+    "customMultiviewWindow": {
+      "type": "object",
+      "properties": {
+        "windowReference": {
+          "type": "integer",
+          "description": "1-based window reference used to order or map this window in commands."
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "scale": {
+          "type": "string",
+          "default": "Stretch",
+          "pattern": "^(?:[fF][iI][tT]|[sS][tT][rR][eE][tT][cC][hH])(?:\\s*,\\s*(?:[fF][iI][tT]|[sS][tT][rR][eE][tT][cC][hH]))*$",
+          "description": "Case-insensitive."
+        },
+        "rotation": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "e.g. 0, 90, 180, 270 when supported by firmware."
+        }
+      },
+      "required": [
+        "windowReference"
+      ]
+    },
+    "multiviewPreset": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Unique preset key selected by control logic."
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "layoutSource": {
+          "type": "string",
+          "default": "Config",
+          "pattern": "^(?:[cC][oO][nN][tT][rR][oO][lL][lL][eE][rR]|[cC][oO][nN][fF][iI][gG])(?:\\s*,\\s*(?:[cC][oO][nN][tT][rR][oO][lL][lL][eE][rR]|[cC][oO][nN][fF][iI][gG]))*$",
+          "description": "Case-insensitive."
+        },
+        "layout": {
+          "type": "string",
+          "description": "Controller: CTL preset scene name (e.g. \"4-4\"). Config: key from customMultiviewLayouts."
+        },
+        "windowRoutes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/multiviewPresetWindowRoute"
+          }
+        },
+        "audioMode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Unknown",
+            "Window",
+            "Separate",
+            "NoChange",
+            null
+          ],
+          "default": "NoChange"
+        },
+        "audioWindowReference": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "audioTxKey": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "key"
+      ]
+    },
+    "multiviewPresetWindowRoute": {
+      "type": "object",
+      "properties": {
+        "windowReference": {
+          "type": "integer",
+          "description": "1-based multiview window/tile reference."
+        },
+        "txKey": {
+          "type": "string",
+          "description": "TX device key to route into windowReference."
+        }
+      },
+      "required": [
+        "windowReference",
+        "txKey"
+      ]
+    }
+  }
+}
