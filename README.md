@@ -288,3 +288,206 @@ Issues and pull requests are welcome. Please include:
 ## Development Note
 
 IR/232 functionality is currently under development and intentionally omitted from this README for now.
+<!-- START Minimum Essentials Framework Versions -->
+
+<!-- END Minimum Essentials Framework Versions -->
+<!-- START Config Example -->
+### Config Example
+
+```json
+{
+    "key": "GeneratedKey",
+    "uid": 1,
+    "name": "GeneratedName",
+    "type": "MockNhdRxProperties",
+    "group": "Group",
+    "properties": {
+        "tileCount": 0
+    }
+}
+```
+<!-- END Config Example -->
+<!-- START Supported Types -->
+
+<!-- END Supported Types -->
+<!-- START Join Maps -->
+
+<!-- END Join Maps -->
+<!-- START Interfaces Implemented -->
+### Interfaces Implemented
+
+- IRoutingSource
+- IHasDynamicMultiviewLayout
+- IRoutingSinkWithLayouts
+- IRoutingSinkWithLayoutState
+- IRoutingSinkWithFeedback
+- IRoutingMidpoint
+- INhdInputSlot
+- IKeyName
+- IRoutingMidpointWithFeedback
+<!-- END Interfaces Implemented -->
+<!-- START Base Classes -->
+### Base Classes
+
+- NhdBaseDeviceFactory<Nhd120Tx>
+- NhdBaseDeviceFactory<Nhd150Rx>
+- NhdBaseDeviceFactory<NhdCtlPro>
+- Enumeration<AudioOutputEnum>
+- Enumeration<VideoOutputEnum>
+- Enumeration<AudioInputEnum>
+- Enumeration<DeviceInputEnum>
+- Enumeration<VideoInputEnum>
+- EventArgs
+- StatusMonitorBase
+- NhdBaseDevice
+- EssentialsDevice
+- JsonConverter
+<!-- END Base Classes -->
+<!-- START Public Methods -->
+### Public Methods
+
+- public int CompareTo(Enumeration<TEnum> other)
+- public int CompareTo(object other)
+- public void ProbeSessionHealth(string reason = null)
+- public void HandleCtlTransportConnectionChanged(bool isConnected)
+- public void StartSessionLifecycle()
+- public void StopSessionLifecycle()
+- public bool TryRouteMVTile(IKeyed requestedBy, NhdBaseDevice txEndpoint, NhdBaseDevice rxEndpoint, string layoutName, int tileReference)
+- public MultiviewTileRouteResult RouteMVTileGuarded(IKeyed requestedBy, NhdBaseDevice txEndpoint, NhdBaseDevice rxEndpoint, string layoutName, int tileReference)
+- public bool TryActivateMVLayout(IKeyed requestedBy, NhdBaseDevice rxEndpoint, string layoutName)
+- public bool TryApplyCustomMVLayout(IKeyed requestedBy, NhdBaseDevice rxEndpoint, string layoutKey)
+- public bool TryApplyCustomMVLayoutWithSources(
+            IKeyed requestedBy,
+            NhdBaseDevice rxEndpoint,
+            string layoutKey,
+            IDictionary<int, string> sourceReferencesByWindow)
+- public bool TryApplyDynamicLayout(IKeyed requestedBy, NhdBaseDevice rxEndpoint, IReadOnlyList<NhdMultiviewTileState> tiles)
+- public bool TryApplyMVPreset(IKeyed requestedBy, NhdBaseDevice rxEndpoint, string presetKey)
+- public bool TryFullscreenMVTile(IKeyed requestedBy, NhdBaseDevice rxEndpoint, int sourceTileReference)
+- public bool TryReturnFromMVFullscreen(IKeyed requestedBy, NhdBaseDevice rxEndpoint)
+- public bool TryGetMVFullscreenReturnLayout(NhdBaseDevice rxEndpoint, out string layoutName)
+- public bool TryProbeAndLearnMVLayouts(IKeyed requestedBy, NhdBaseDevice rxEndpoint)
+- public bool TryReprobeAndLearnMVLayouts(IKeyed requestedBy, NhdBaseDevice rxEndpoint)
+- public void RequestMVLayoutList(NhdBaseDevice endpoint, IKeyed source = null)
+- public NhdMultiviewTileState WithSourceReference(string resolvedSourceReference)
+- public void SetResolvedHostname(string hostname)
+- public void SetOnlineState(bool isOnline)
+- public void SetInputSyncState(bool hasSync)
+- public bool TryGetHdmiOutResolutionDimensions(out int width, out int height)
+- public void SetHdmiOutResolution(string resolution)
+- public bool TryGetCustomMVLayout(string layoutKey, out NhdCustomMultiviewLayoutProperties layout)
+- public bool TryGetMVPreset(string presetKey, out NhdMultiviewPresetProperties preset)
+- public bool IsMVStateFresh(TimeSpan maxAge)
+- public void SetMVRuntimeState(NhdMultiStreamMode mode, int activeTileCount)
+- public void SetMVRuntimeState(NhdMultiStreamMode mode, IReadOnlyList<NhdMultiviewTileState> tiles)
+- public bool TryGetActiveMVTile(int tileReference, out NhdMultiviewTileState tile)
+- public void SetActiveMVAudioWindow(int? windowReference)
+- public void SetActiveMVAudioSeparateSource(string sourceReference)
+- public void SetPresetLayoutAudioWindow(string layoutName, int? windowReference)
+- public void SetPresetLayoutAudioSeparateSource(string layoutName, string sourceReference)
+- public void ApplyPresetLayoutAudioSetting(string layoutName)
+- public void SetAvailablePresetMVLayouts(IEnumerable<string> layoutNames)
+- public bool IsKnownPresetMVLayout(string layoutName)
+- public bool TryCaptureActiveLayoutGeometry(string layoutName)
+- public void ClearLearnedPresetLayoutGeometrySignatures()
+- public bool TryIdentifyPresetLayoutByActiveGeometry(out string layoutName)
+- public bool TryIdentifyCustomLayoutByActiveGeometry(out string layoutKey)
+- public void SetActivePresetMVLayout(string layoutName, bool inferred = false)
+- public void SetActiveCustomMVLayout(string layoutKey, bool inferred = false)
+- public bool ReprobeMVLayouts()
+- public bool RefreshMVLayouts()
+- public bool ApplyCustomMVLayout(string layoutKey)
+- public bool ApplyCustomMVLayoutWithSources(string layoutKey, IDictionary<int, string> sourceReferencesByWindow)
+- public bool ApplyMVPreset(string presetKey)
+- public bool RecallMVLayout(string id)
+- public string GetMVLayoutsWithIdsJson()
+- public string GetEndpointConfigJson()
+- public bool FullscreenMVTile(int sourceTileReference)
+- public bool ReturnFromMVFullscreen()
+- public bool TryGetMVFullscreenReturnLayout(out string layoutName)
+- public void ExecuteSwitch(object inputSelector, object outputSelector, eRoutingSignalType signalType)
+- public void ClearRoute(object outputSelector, eRoutingSignalType signalType)
+- public NhdMultiviewTileSink GetTileSink(int tileNumber)
+- public bool ApplyDynamicLayout(
+			IReadOnlyList<MultiviewParticipantSource> participantSources,
+			string presentationSourceKey)
+- public bool ApplyDynamicLayout(string[] sourceKeys, int[] priorities, string presentationSourceKey)
+- public MockNhdMultiviewTileSink GetTileSink(int tileNumber)
+- public bool ApplyDynamicLayout(
+			IReadOnlyList<MultiviewParticipantSource> participantSources,
+			string presentationSourceKey)
+- public bool ApplyDynamicLayout(string[] sourceKeys, int[] priorities, string presentationSourceKey)
+- public void ExecuteSwitch(object inputSelector)
+- public void SetCurrentSource(eRoutingSignalType signalType, IRoutingSource sourceDevice)
+- public void UpdateCurrentSourceState(eRoutingSignalType signalType, IRoutingSource sourceDevice)
+- public void SetInputRoute(eRoutingSignalType type, INhdInputSlot input)
+- public void ExecuteSwitch(object inputSelector)
+- public void SetCurrentSource(eRoutingSignalType signalType, IRoutingSource sourceDevice)
+- public void UpdateCurrentSourceState(eRoutingSignalType signalType, IRoutingSource sourceDevice)
+- public void ExecuteSwitch(object inputSelector, object outputSelector, eRoutingSignalType signalType)
+- public void ClearRoute(object outputSelector, eRoutingSignalType signalType)
+- public void ExecuteNumericSwitch(ushort input, ushort output, eRoutingSignalType type)
+- public void RouteBySlot(int inputSlot, int outputSlot, eRoutingSignalType type)
+- public bool TrySetTrackedMatrixRoute(string txEndpointKey, string rxEndpointKey, eRoutingSignalType signalType)
+- public void Route(string inputSlotKey, string outputSlotKey, eRoutingSignalType type)
+- public bool ApplyControllerMVLayout(string outputSlotKey, string layoutName)
+- public bool ActivateMVLayout(string outputSlotKey, string layoutName)
+- public bool ApplyCustomMVLayout(string outputSlotKey, string layoutKey)
+- public bool ApplyCustomMVLayoutWithContent(
+        string outputSlotKey,
+        string layoutKey,
+        IDictionary<int, string> inputSlotKeysByWindow)
+- public bool ApplyMVPreset(string outputSlotKey, string presetKey)
+- public bool TryGetTrackedMVLayout(string outputSlotKey, out string layoutName, out bool inferred)
+- public bool TryGetTrackedCustomMVLayout(string outputSlotKey, out string layoutKey, out bool inferred)
+- public bool ProbeAndLearnMVLayouts(string outputSlotKey)
+- public bool RouteMVTile(string inputSlotKey, string outputSlotKey, int tileReference)
+- public bool FullscreenMVTile(string outputSlotKey, int sourceTileReference)
+- public bool ReturnFromMVFullscreen(string outputSlotKey)
+- public bool TryGetMVFullscreenReturnLayout(string outputSlotKey, out string layoutName)
+- public bool RouteMVTile(string inputSlotKey, string outputSlotKey, string layoutName, int tileReference)
+- public bool TryExecute(IKeyed source, INhdInputSlot inputSlot, NhdMatrixOutput output, eRoutingSignalType signalType, out eRoutingSignalType routedSignalType)
+- public bool TryExecute(IKeyed source, INhdInputSlot inputSlot, NhdMatrixOutput output, eRoutingSignalType signalType)
+- public bool TryExecute(IKeyed source, INhdInputSlot inputSlot, NhdMatrixOutput output, eRoutingSignalType signalType)
+- public void Base_Factory_Defines_MinimumEssentialsVersion_As_3_0_0()
+- public void Factory_Assigns_MinimumEssentialsFrameworkVersion(string factoryClassName)
+- public void Factory_Sets_TypeNames(string factoryClassName)
+- public void Factory_Source_Contains_TypeName(string factoryClassName, string typeName)
+- public void No_Duplicate_TypeNames_Across_Factories()
+- public void Assembly_Loads_Successfully()
+- public void Assembly_Name_Is_Expected()
+- public void Factory_Count_Is_Six()
+- public void Factory_Exists_ByName(string factoryClassName)
+- public void All_Factories_Have_Parameterless_Constructor()
+- public void Config_Class_Exists(string fullName)
+- public void Config_Has_Parameterless_Constructor(string fullName)
+- public void NhdDeviceProperties_Property_Type_Matches(string propertyName, string expectedTypeName)
+- public void NhdDeviceProperties_List_Property_Element_Type(string propertyName, string expectedElementType)
+- public void NhdDeviceProperties_Deserializes_Sample_Json()
+- public void Calculator_Type_Exists()
+- public void Calculator_Is_Static()
+- public void CalculateLayout_Method_Exists_With_Expected_Signature()
+- public void Grid_Layout_Uses_Ceiling_Sqrt_For_Column_Count()
+- public void Presentation_Tile_Is_Always_Tile_Number_One()
+- public void Participants_Are_Ordered_By_Priority_Ascending()
+- public void Overflow_Participants_Are_Clamped_To_Available_Tile_Capacity()
+- public void Nhd150Rx_Type_Exists()
+- public void ApplyDynamicLayout_ParticipantSource_Overload_Exists()
+- public void ApplyDynamicLayout_Devjson_Friendly_Overload_Exists()
+<!-- END Public Methods -->
+<!-- START Bool Feedbacks -->
+### Bool Feedbacks
+
+- IsOnline
+- InputSyncDetected
+- IsOnline
+- IsOnline
+- IsOnline
+- IsOnline
+<!-- END Bool Feedbacks -->
+<!-- START Int Feedbacks -->
+
+<!-- END Int Feedbacks -->
+<!-- START String Feedbacks -->
+
+<!-- END String Feedbacks -->
