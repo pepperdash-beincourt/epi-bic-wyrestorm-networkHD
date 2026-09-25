@@ -98,7 +98,7 @@
     },
     "control": {
       "type": "object",
-      "description": "Standard Essentials communication control block.",
+      "description": "Standard Essentials communication control block. The transport fields required depend on method: tcpSshProperties for tcpip, ssh, telnet and secureTcpIp; controlPortDevKey, controlPortNumber and comParams for com.",
       "properties": {
         "method": {
           "type": "string",
@@ -107,11 +107,115 @@
         },
         "tcpSshProperties": {
           "$ref": "#/definitions/tcpSshProperties"
+        },
+        "controlPortDevKey": {
+          "type": "string",
+          "description": "Key of the device that owns the COM port (for example \"processor\"). Used when method is com."
+        },
+        "controlPortNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "COM port number on that device. Used when method is com."
+        },
+        "comParams": {
+          "type": "object",
+          "description": "Serial port settings (Essentials ComPortSpec). Used when method is com.",
+          "properties": {
+            "baudRate": {
+              "type": "integer",
+              "default": 9600
+            },
+            "dataBits": {
+              "type": "integer",
+              "enum": [
+                7,
+                8
+              ],
+              "default": 8
+            },
+            "stopBits": {
+              "type": "integer",
+              "enum": [
+                1,
+                2
+              ],
+              "default": 1
+            },
+            "parity": {
+              "type": "string",
+              "default": "None",
+              "description": "None, Even or Odd (case-insensitive)."
+            },
+            "protocol": {
+              "type": "string",
+              "default": "RS232",
+              "description": "RS232, RS422 or RS485 (case-insensitive)."
+            },
+            "hardwareHandshake": {
+              "type": "string",
+              "default": "None",
+              "description": "None, RTS, CTS or RTSCTS (case-insensitive)."
+            },
+            "softwareHandshake": {
+              "type": "string",
+              "default": "None",
+              "description": "None, XON, XONT or XONR (case-insensitive)."
+            },
+            "pacing": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          "required": [
+            "baudRate",
+            "dataBits",
+            "stopBits",
+            "parity",
+            "protocol"
+          ]
         }
       },
       "required": [
-        "method",
-        "tcpSshProperties"
+        "method"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "pattern": "^\\s*(?:[tT][cC][pP][iI][pP]|[sS][sS][hH]|[tT][eE][lL][nN][eE][tT]|[sS][eE][cC][uU][rR][eE][tT][cC][pP][iI][pP])\\s*$"
+              }
+            },
+            "required": [
+              "method"
+            ]
+          },
+          "then": {
+            "required": [
+              "tcpSshProperties"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "pattern": "^\\s*[cC][oO][mM]\\s*$"
+              }
+            },
+            "required": [
+              "method"
+            ]
+          },
+          "then": {
+            "required": [
+              "controlPortDevKey",
+              "controlPortNumber",
+              "comParams"
+            ]
+          }
+        }
       ]
     },
     "tcpSshProperties": {
