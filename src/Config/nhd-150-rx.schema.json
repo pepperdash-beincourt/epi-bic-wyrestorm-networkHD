@@ -22,7 +22,7 @@
       ]
     },
     "properties": {
-      "$ref": "#/$defs/properties",
+      "$ref": "#/definitions/properties",
       "description": "Properties object for a device of type \"nhd-150-rx\" (also \"nhd150rx\") - a WyreStorm NetworkHD multiview decoder - backed by NhdDeviceProperties (NhdDeviceProperties.cs). This class is shared by all NHD device roles; fields most relevant to a decoder are alias, customMultiviewLayouts, multiviewPresets, and maxTileCount."
     }
   },
@@ -32,12 +32,12 @@
     "type",
     "properties"
   ],
-  "$defs": {
+  "definitions": {
     "properties": {
       "type": "object",
       "properties": {
         "control": {
-          "$ref": "#/$defs/control"
+          "$ref": "#/definitions/control"
         },
         "matrixInputSlot": {
           "type": "integer",
@@ -52,7 +52,7 @@
           "description": "Friendly alias for this decoder (matches the WyreStorm device name/trueName, e.g. \"RX-DIS-Judge\")."
         },
         "rs232": {
-          "$ref": "#/$defs/rs232"
+          "$ref": "#/definitions/rs232"
         },
         "apiUsername": {
           "type": "string"
@@ -77,14 +77,14 @@
           "type": "array",
           "description": "Named custom multiview geometry profiles usable by this decoder.",
           "items": {
-            "$ref": "#/$defs/customMultiviewLayout"
+            "$ref": "#/definitions/customMultiviewLayout"
           }
         },
         "multiviewPresets": {
           "type": "array",
           "description": "Named multiview presets (either a controller scene name or a config-defined custom layout) plus optional window-to-TX routing.",
           "items": {
-            "$ref": "#/$defs/multiviewPreset"
+            "$ref": "#/definitions/multiviewPreset"
           }
         },
         "maxTileCount": {
@@ -106,7 +106,7 @@
           "description": "Case-insensitive."
         },
         "tcpSshProperties": {
-          "$ref": "#/$defs/tcpSshProperties"
+          "$ref": "#/definitions/tcpSshProperties"
         }
       },
       "required": [
@@ -235,7 +235,7 @@
         "windows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/customMultiviewWindow"
+            "$ref": "#/definitions/customMultiviewWindow"
           }
         }
       },
@@ -303,7 +303,7 @@
         "windowRoutes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/multiviewPresetWindowRoute"
+            "$ref": "#/definitions/multiviewPresetWindowRoute"
           }
         },
         "audioMode": {

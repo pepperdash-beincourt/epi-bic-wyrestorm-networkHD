@@ -22,7 +22,7 @@
       ]
     },
     "properties": {
-      "$ref": "#/$defs/properties",
+      "$ref": "#/definitions/properties",
       "description": "Properties object for a device of type \"nhd-ctl-pro\" (also \"nhdctlpro\") - the WyreStorm NetworkHD controller (out-of-band Telnet control-plane device) - backed by NhdDeviceProperties (NhdDeviceProperties.cs). This class is shared by all NHD device roles (controller, Tx, Rx); fields most relevant to the controller are apiUsername/apiPassword and customMultiviewLayouts/multiviewPresets (which define named layouts usable by any decoder)."
     }
   },
@@ -32,12 +32,12 @@
     "type",
     "properties"
   ],
-  "$defs": {
+  "definitions": {
     "properties": {
       "type": "object",
       "properties": {
         "control": {
-          "$ref": "#/$defs/control"
+          "$ref": "#/definitions/control"
         },
         "matrixInputSlot": {
           "type": "integer",
@@ -52,7 +52,7 @@
           "description": "Not typically used for the controller role."
         },
         "rs232": {
-          "$ref": "#/$defs/rs232"
+          "$ref": "#/definitions/rs232"
         },
         "apiUsername": {
           "type": "string",
@@ -79,14 +79,14 @@
           "type": "array",
           "description": "Named custom multiview geometry profiles usable by decoders in this system.",
           "items": {
-            "$ref": "#/$defs/customMultiviewLayout"
+            "$ref": "#/definitions/customMultiviewLayout"
           }
         },
         "multiviewPresets": {
           "type": "array",
           "description": "Named multiview presets (either a controller scene name or a config-defined custom layout) plus optional window-to-TX routing.",
           "items": {
-            "$ref": "#/$defs/multiviewPreset"
+            "$ref": "#/definitions/multiviewPreset"
           }
         },
         "maxTileCount": {
@@ -111,7 +111,7 @@
           "description": "Case-insensitive."
         },
         "tcpSshProperties": {
-          "$ref": "#/$defs/tcpSshProperties"
+          "$ref": "#/definitions/tcpSshProperties"
         }
       },
       "required": [
@@ -241,7 +241,7 @@
         "windows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/customMultiviewWindow"
+            "$ref": "#/definitions/customMultiviewWindow"
           }
         }
       },
@@ -309,7 +309,7 @@
         "windowRoutes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/multiviewPresetWindowRoute"
+            "$ref": "#/definitions/multiviewPresetWindowRoute"
           }
         },
         "audioMode": {

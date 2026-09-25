@@ -22,7 +22,7 @@
       ]
     },
     "properties": {
-      "$ref": "#/$defs/properties",
+      "$ref": "#/definitions/properties",
       "description": "Properties object for a device of type \"nhd-120-tx\" (also \"nhd120tx\") - a WyreStorm NetworkHD encoder - backed by NhdDeviceProperties (NhdDeviceProperties.cs). This class is shared by all NHD device roles; the field most relevant to an encoder is alias. Multiview-related fields (customMultiviewLayouts, multiviewPresets, maxTileCount) do not apply to a Tx."
     }
   },
@@ -32,12 +32,12 @@
     "type",
     "properties"
   ],
-  "$defs": {
+  "definitions": {
     "properties": {
       "type": "object",
       "properties": {
         "control": {
-          "$ref": "#/$defs/control"
+          "$ref": "#/definitions/control"
         },
         "matrixInputSlot": {
           "type": "integer",
@@ -52,7 +52,7 @@
           "description": "Friendly alias for this encoder (matches the WyreStorm device name/trueName, e.g. \"TX-CAM-01\")."
         },
         "rs232": {
-          "$ref": "#/$defs/rs232"
+          "$ref": "#/definitions/rs232"
         },
         "apiUsername": {
           "type": "string"
@@ -106,7 +106,7 @@
           "description": "Case-insensitive."
         },
         "tcpSshProperties": {
-          "$ref": "#/$defs/tcpSshProperties"
+          "$ref": "#/definitions/tcpSshProperties"
         }
       },
       "required": [
