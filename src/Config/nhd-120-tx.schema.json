@@ -14,8 +14,12 @@
       "description": "Friendly display name for this device."
     },
     "type": {
-      "const": "nhd-120-tx",
-      "description": "Discriminator identifying the plugin factory that instantiates this device."
+      "type": "string",
+      "description": "Discriminator identifying the plugin factory that instantiates this device. Accepted aliases are equivalent.",
+      "enum": [
+        "nhd-120-tx",
+        "nhd120tx"
+      ]
     },
     "properties": {
       "$ref": "#/$defs/properties",

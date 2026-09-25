@@ -14,8 +14,12 @@
       "description": "Friendly display name for this device."
     },
     "type": {
-      "const": "nhd-ctl-pro",
-      "description": "Discriminator identifying the plugin factory that instantiates this device."
+      "type": "string",
+      "description": "Discriminator identifying the plugin factory that instantiates this device. Accepted aliases are equivalent.",
+      "enum": [
+        "nhd-ctl-pro",
+        "nhdctlpro"
+      ]
     },
     "properties": {
       "$ref": "#/$defs/properties",
