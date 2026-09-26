@@ -1,0 +1,297 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pepperdash.com/schemas/epi-wyrestorm-networkHD/nhd-120-tx.schema.json",
+  "title": "nhd-120-tx",
+  "description": "Device config entry for a device of type \"nhd-120-tx\". Properties object for a device of type \"nhd-120-tx\" (also \"nhd120tx\") - a WyreStorm NetworkHD encoder - backed by NhdDeviceProperties (NhdDeviceProperties.cs). This class is shared by all NHD device roles; the field most relevant to an encoder is alias. Multiview-related fields (customMultiviewLayouts, multiviewPresets, maxTileCount) do not apply to a Tx.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Unique identifier for this device within the configuration file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Friendly display name for this device."
+    },
+    "type": {
+      "type": "string",
+      "description": "Discriminator identifying the plugin factory that instantiates this device. Accepted aliases are equivalent.",
+      "enum": [
+        "nhd-120-tx",
+        "nhd120tx"
+      ]
+    },
+    "properties": {
+      "$ref": "#/definitions/properties",
+      "description": "Properties object for a device of type \"nhd-120-tx\" (also \"nhd120tx\") - a WyreStorm NetworkHD encoder - backed by NhdDeviceProperties (NhdDeviceProperties.cs). This class is shared by all NHD device roles; the field most relevant to an encoder is alias. Multiview-related fields (customMultiviewLayouts, multiviewPresets, maxTileCount) do not apply to a Tx."
+    }
+  },
+  "required": [
+    "key",
+    "name",
+    "type",
+    "properties"
+  ],
+  "definitions": {
+    "properties": {
+      "type": "object",
+      "properties": {
+        "control": {
+          "$ref": "#/definitions/control"
+        },
+        "matrixInputSlot": {
+          "type": "integer",
+          "description": "Not typically used for the encoder role."
+        },
+        "matrixOutputSlot": {
+          "type": "integer",
+          "description": "Not typically used for the encoder role."
+        },
+        "alias": {
+          "type": "string",
+          "description": "Friendly alias for this encoder (matches the WyreStorm device name/trueName, e.g. \"TX-CAM-01\")."
+        },
+        "rs232": {
+          "$ref": "#/definitions/rs232"
+        },
+        "apiUsername": {
+          "type": "string"
+        },
+        "apiPassword": {
+          "type": "string"
+        },
+        "mode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Transmitter",
+            "Receiver",
+            "Transceiver",
+            null
+          ],
+          "description": "Not applicable - the NHD-120-TX hardcodes the Transmitter role."
+        },
+        "customMultiviewLayouts": {
+          "type": "array",
+          "description": "Not applicable to the encoder role.",
+          "items": {
+            "type": "object"
+          }
+        },
+        "multiviewPresets": {
+          "type": "array",
+          "description": "Not applicable to the encoder role.",
+          "items": {
+            "type": "object"
+          }
+        },
+        "maxTileCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Not applicable to the encoder role."
+        }
+      }
+    },
+    "control": {
+      "type": "object",
+      "description": "Standard Essentials communication control block. The transport fields required depend on method: tcpSshProperties for tcpip, ssh, telnet and secureTcpIp; controlPortDevKey, controlPortNumber and comParams for com.",
+      "properties": {
+        "method": {
+          "type": "string",
+          "pattern": "^(?:[nN][oO][nN][eE]|[cC][oO][mM]|[iI][pP][iI][dD]|[iI][pP][iI][dD][tT][cC][pP]|[iI][rR]|[sS][sS][hH]|[tT][cC][pP][iI][pP]|[tT][eE][lL][nN][eE][tT]|[cC][rR][eE][sS][nN][eE][tT]|[cC][eE][cC]|[uU][dD][pP]|[hH][tT][tT][pP]|[hH][tT][tT][pP][sS]|[wW][sS]|[wW][sS][sS]|[sS][eE][cC][uU][rR][eE][tT][cC][pP][iI][pP]|[cC][oO][mM][bB][rR][iI][dD][gG][eE]|[iI][nN][fF][iI][nN][eE][tT][eE][xX])(?:\\s*,\\s*(?:[nN][oO][nN][eE]|[cC][oO][mM]|[iI][pP][iI][dD]|[iI][pP][iI][dD][tT][cC][pP]|[iI][rR]|[sS][sS][hH]|[tT][cC][pP][iI][pP]|[tT][eE][lL][nN][eE][tT]|[cC][rR][eE][sS][nN][eE][tT]|[cC][eE][cC]|[uU][dD][pP]|[hH][tT][tT][pP]|[hH][tT][tT][pP][sS]|[wW][sS]|[wW][sS][sS]|[sS][eE][cC][uU][rR][eE][tT][cC][pP][iI][pP]|[cC][oO][mM][bB][rR][iI][dD][gG][eE]|[iI][nN][fF][iI][nN][eE][tT][eE][xX]))*$",
+          "description": "Case-insensitive."
+        },
+        "tcpSshProperties": {
+          "$ref": "#/definitions/tcpSshProperties"
+        },
+        "controlPortDevKey": {
+          "type": "string",
+          "description": "Key of the device that owns the COM port (for example \"processor\"). Used when method is com."
+        },
+        "controlPortNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "COM port number on that device. Used when method is com."
+        },
+        "comParams": {
+          "type": "object",
+          "description": "Serial port settings (Essentials ComPortSpec). Used when method is com.",
+          "properties": {
+            "baudRate": {
+              "type": "integer",
+              "default": 9600
+            },
+            "dataBits": {
+              "type": "integer",
+              "enum": [
+                7,
+                8
+              ],
+              "default": 8
+            },
+            "stopBits": {
+              "type": "integer",
+              "enum": [
+                1,
+                2
+              ],
+              "default": 1
+            },
+            "parity": {
+              "type": "string",
+              "default": "None",
+              "description": "None, Even or Odd (case-insensitive)."
+            },
+            "protocol": {
+              "type": "string",
+              "default": "RS232",
+              "description": "RS232, RS422 or RS485 (case-insensitive)."
+            },
+            "hardwareHandshake": {
+              "type": "string",
+              "default": "None",
+              "description": "None, RTS, CTS or RTSCTS (case-insensitive)."
+            },
+            "softwareHandshake": {
+              "type": "string",
+              "default": "None",
+              "description": "None, XON, XONT or XONR (case-insensitive)."
+            },
+            "pacing": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          "required": [
+            "baudRate",
+            "dataBits",
+            "stopBits",
+            "parity",
+            "protocol"
+          ]
+        }
+      },
+      "required": [
+        "method"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "pattern": "^\\s*(?:[tT][cC][pP][iI][pP]|[sS][sS][hH]|[tT][eE][lL][nN][eE][tT]|[sS][eE][cC][uU][rR][eE][tT][cC][pP][iI][pP])\\s*$"
+              }
+            },
+            "required": [
+              "method"
+            ]
+          },
+          "then": {
+            "required": [
+              "tcpSshProperties"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "pattern": "^\\s*[cC][oO][mM]\\s*$"
+              }
+            },
+            "required": [
+              "method"
+            ]
+          },
+          "then": {
+            "required": [
+              "controlPortDevKey",
+              "controlPortNumber",
+              "comParams"
+            ]
+          }
+        }
+      ]
+    },
+    "tcpSshProperties": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "autoReconnect": {
+          "type": "boolean",
+          "default": true
+        },
+        "autoReconnectIntervalMs": {
+          "type": "integer",
+          "default": 5000
+        }
+      },
+      "required": [
+        "address",
+        "port"
+      ]
+    },
+    "rs232": {
+      "type": "object",
+      "description": "RS-232 pass-through settings for this NHD unit.",
+      "properties": {
+        "baudRate": {
+          "type": "integer",
+          "enum": [
+            2400,
+            4800,
+            9600,
+            19200,
+            38400,
+            57600,
+            115200
+          ],
+          "default": 9600
+        },
+        "dataBits": {
+          "type": "string",
+          "default": "Eight",
+          "pattern": "^(?:[sS][iI][xX]|[sS][eE][vV][eE][nN]|[eE][iI][gG][hH][tT])(?:\\s*,\\s*(?:[sS][iI][xX]|[sS][eE][vV][eE][nN]|[eE][iI][gG][hH][tT]))*$",
+          "description": "Case-insensitive."
+        },
+        "parity": {
+          "type": "string",
+          "default": "None",
+          "pattern": "^(?:[nN][oO][nN][eE]|[oO][dD][dD]|[eE][vV][eE][nN])(?:\\s*,\\s*(?:[nN][oO][nN][eE]|[oO][dD][dD]|[eE][vV][eE][nN]))*$",
+          "description": "Case-insensitive."
+        },
+        "stopBits": {
+          "type": "string",
+          "default": "One",
+          "pattern": "^(?:[oO][nN][eE]|[tT][wW][oO])(?:\\s*,\\s*(?:[oO][nN][eE]|[tT][wW][oO]))*$",
+          "description": "Case-insensitive."
+        },
+        "appendCr": {
+          "type": "boolean"
+        },
+        "appendLf": {
+          "type": "boolean"
+        },
+        "sendAsHex": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

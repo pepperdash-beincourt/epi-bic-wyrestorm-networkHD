@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
- 	<PackageReference Include="PepperDashEssentials" Version="3.0.0-dev-v3-routing.50" >
+ 	<PackageReference Include="PepperDashEssentials" Version="3.0.0-fix-surface-masked-device-instantiation-errors.1" >
   		<ExcludeAssets>runtime</ExcludeAssets>
  	</PackageReference>
   </ItemGroup>
