@@ -49,7 +49,7 @@
         },
         "alias": {
           "type": "string",
-          "description": "Friendly alias for this decoder (matches the WyreStorm device name/trueName, e.g. \"RX-DIS-Judge\")."
+          "description": "Friendly alias for this decoder (matches the WyreStorm device name/trueName, e.g. \"RX-DIS-01\")."
         },
         "rs232": {
           "$ref": "#/definitions/rs232"
