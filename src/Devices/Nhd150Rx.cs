@@ -96,6 +96,12 @@ namespace PepperDash.Essentials.Plugin
 
 			TryGetHdmiOutResolutionDimensions(out _, out _);
 
+			// A presentation source behind a switching device (for example a document camera's HDMI
+			// input) needs that device switched to it; the layout below only names the transmitter.
+			// Only the presentation source is selected: participant tiles never switch shared devices.
+			if (!string.IsNullOrWhiteSpace(presentationSourceKey))
+				NhdSourcePath.SelectPath(presentationSourceKey, this);
+
 			// The NHD multiview coordinate space is the fixed 1920x1080 reference canvas the layouts are
 			// authored against (see NhdDynamicMultiviewLayoutCalculator) - NOT the decoder's HDMI-out
 			// resolution. Scaling tiles up to a 4K output pushes them outside the multiview canvas and the
