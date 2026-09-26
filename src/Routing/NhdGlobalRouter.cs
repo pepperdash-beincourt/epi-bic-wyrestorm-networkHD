@@ -76,9 +76,27 @@ public class NhdGlobalRouter : EssentialsDevice, IRoutingMidpointWithFeedback
 
     public void ExecuteSwitch(object inputSelector, object outputSelector, eRoutingSignalType signalType)
     {
+        // The router's routing ports carry the endpoint device as their selector (see
+        // BuildMatrixRouting), so a route from the Essentials routing engine arrives with devices
+        // rather than slots. Map them to the slots this method works with.
+        if (outputSelector is not NhdMatrixOutput && outputSelector is IKeyed outputDevice
+            && OutputSlots.TryGetValue(outputDevice.Key, out var mappedOutput))
+            outputSelector = mappedOutput;
+
+        if (inputSelector is not INhdInputSlot && inputSelector is IKeyed inputDevice
+            && InputSlots.TryGetValue(inputDevice.Key, out var mappedInput))
+            inputSelector = mappedInput;
+
         if (outputSelector is not NhdMatrixOutput output)
         {
             this.LogError("Output selector is not NhdMatrixOutput");
+            return;
+        }
+
+        if (inputSelector == null)
+        {
+            // A released route. Leave the decoder on its current stream rather than blanking it.
+            this.LogDebug("Route to '{key}' released; leaving its current stream", output.Key);
             return;
         }
 
