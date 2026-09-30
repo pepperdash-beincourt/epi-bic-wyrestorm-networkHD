@@ -34,6 +34,7 @@ public class FactoryMetadataTests
     [InlineData("NhdCtlDeviceFactory")]
     [InlineData("NhdRxDeviceFactory")]
     [InlineData("NhdTxDeviceFactory")]
+    [InlineData("NhdSinkDisplayFactory")]
     public void Factory_Sets_TypeNames(string factoryClassName)
     {
         var content = AssemblyFixture.FindSourceForClass(factoryClassName);
@@ -49,6 +50,8 @@ public class FactoryMetadataTests
     [InlineData("NhdRxDeviceFactory", "nhd150rx")]
     [InlineData("NhdTxDeviceFactory", "nhd-120-tx")]
     [InlineData("NhdTxDeviceFactory", "nhd120tx")]
+    [InlineData("NhdSinkDisplayFactory", "nhd-sink-display")]
+    [InlineData("NhdSinkDisplayFactory", "nhdsinkdisplay")]
     public void Factory_Source_Contains_TypeName(string factoryClassName, string typeName)
     {
         var content = AssemblyFixture.FindSourceForClass(factoryClassName);

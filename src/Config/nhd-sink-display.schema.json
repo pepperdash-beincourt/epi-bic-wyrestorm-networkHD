@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pepperdash.com/schemas/epi-wyrestorm-networkHD/nhd-sink-display.schema.json",
+  "title": "nhd-sink-display",
+  "description": "Device config entry for a device of type \"nhd-sink-display\" (also \"nhdsinkdisplay\") - a display controlled through the NetworkHD decoder it is plugged into, backed by NhdSinkDisplayProperties (NhdSinkDisplayProperties.cs). The path is one-way, so the reported power state is the last command sent.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Unique identifier for this device within the configuration file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Friendly display name for this device."
+    },
+    "type": {
+      "type": "string",
+      "description": "Discriminator identifying the plugin factory that instantiates this device. Accepted aliases are equivalent.",
+      "enum": [
+        "nhd-sink-display",
+        "nhdsinkdisplay"
+      ]
+    },
+    "properties": {
+      "$ref": "#/definitions/properties"
+    }
+  },
+  "required": [
+    "key",
+    "name",
+    "type",
+    "properties"
+  ],
+  "definitions": {
+    "properties": {
+      "type": "object",
+      "properties": {
+        "decoderKey": {
+          "type": "string",
+          "description": "Key of the NetworkHD decoder device the display is connected to."
+        },
+        "powerOnCommand": {
+          "type": "string",
+          "description": "RS-232 string that turns the display on, sent through the decoder with the serial settings in the decoder's rs232 block. When this and powerOffCommand are both empty, the decoder's sink-power proxy is used instead."
+        },
+        "powerOffCommand": {
+          "type": "string",
+          "description": "RS-232 string that turns the display off. See powerOnCommand."
+        },
+        "warmingTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 10000,
+          "description": "How long the display is reported as warming up after power on."
+        },
+        "coolingTimeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 10000,
+          "description": "How long the display is reported as cooling down after power off."
+        }
+      },
+      "required": [
+        "decoderKey"
+      ]
+    }
+  }
+}

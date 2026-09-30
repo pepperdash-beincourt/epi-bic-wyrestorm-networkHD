@@ -18,18 +18,20 @@ public class FactoryDiscoveryTests
     }
 
     [Fact]
-    public void Factory_Count_Is_Six()
+    public void Factory_Count_Is_Seven()
     {
-        // NhdCtl (controller), NhdRx (decoder), NhdTx (encoder), plus the mock equivalents
-        // (MockNhdCtl, MockNhdRx, MockNhdTx) for local dev/testing without real hardware. The
-        // abstract NhdBaseDeviceFactory<T> base is excluded.
-        AssemblyFixture.FindFactoryTypes().Should().HaveCount(6);
+        // NhdCtl (controller), NhdRx (decoder), NhdTx (encoder), NhdSinkDisplay (a display driven
+        // through its decoder), plus the mock equivalents (MockNhdCtl, MockNhdRx, MockNhdTx) for
+        // local dev/testing without real hardware. The abstract NhdBaseDeviceFactory<T> base is
+        // excluded.
+        AssemblyFixture.FindFactoryTypes().Should().HaveCount(7);
     }
 
     [Theory]
     [InlineData("NhdCtlDeviceFactory")]
     [InlineData("NhdRxDeviceFactory")]
     [InlineData("NhdTxDeviceFactory")]
+    [InlineData("NhdSinkDisplayFactory")]
     [InlineData("MockNhdCtlFactory")]
     [InlineData("MockNhdRxFactory")]
     [InlineData("MockNhdTxFactory")]
