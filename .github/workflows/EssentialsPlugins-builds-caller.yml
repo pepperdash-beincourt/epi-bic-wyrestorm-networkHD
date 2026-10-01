@@ -6,9 +6,15 @@ on:
       - '**'
 
 jobs:
+  # getVersion creates the tag and release, so it waits for the tests: a failing test means no new
+  # version, no release and no package.
+  test:
+    uses: ./.github/workflows/unit-tests.yml
+    secrets: inherit
   getVersion:
     uses: PepperDash/workflow-templates/.github/workflows/essentialsplugins-getversion.yml@main
     secrets: inherit
+    needs: test
 
   build-4Series:
     uses: PepperDash/workflow-templates/.github/workflows/essentialsplugins-4Series-builds.yml@main

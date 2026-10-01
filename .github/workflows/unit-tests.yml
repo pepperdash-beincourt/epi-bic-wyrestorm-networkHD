@@ -1,0 +1,49 @@
+name: Unit Tests
+
+# Pushes run these tests from the build workflow, ahead of versioning and release; pull requests
+# run them here.
+on:
+  workflow_call:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      # Only when the repo restores from a GitHub Packages feed (a nuget.pkg.github.com source in its
+      # nuget.config): authenticate it the way the build workflow does, PACKAGES_PAT first.
+      - name: Authenticate GitHub Packages NuGet feed (if the repo uses one)
+        shell: pwsh
+        env:
+          PACKAGES_PAT: ${{ secrets.PACKAGES_PAT }}
+          FALLBACK_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $cfg = Get-ChildItem -Path . -Filter nuget.config -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $cfg) { Write-Output "No nuget.config; packages come from nuget.org."; exit 0 }
+          [xml]$xml = Get-Content $cfg.FullName
+          $src = $xml.configuration.packageSources.add | Where-Object { $_.value -like '*nuget.pkg.github.com*' } | Select-Object -First 1
+          if (-not $src) { Write-Output "No GitHub Packages source in $($cfg.FullName)."; exit 0 }
+          $token = if ($env:PACKAGES_PAT) { $env:PACKAGES_PAT } else { $env:FALLBACK_TOKEN }
+          dotnet nuget update source $src.key --username "${{ github.actor }}" --password $token --store-password-in-clear-text --configfile $cfg.FullName
+
+      - name: Run tests
+        run: dotnet test tests -c Release --logger "trx;LogFileName=test-results.trx" --results-directory test-results
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: test-results
+          retention-days: 30
