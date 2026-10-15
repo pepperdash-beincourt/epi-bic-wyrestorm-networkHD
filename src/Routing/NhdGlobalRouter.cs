@@ -93,6 +93,14 @@ public class NhdGlobalRouter : EssentialsDevice, IRoutingMidpointWithFeedback
             return;
         }
 
+        // A decoder in multiview takes no "matrix" routes, and its audio is not part of its layout:
+        // route (or, on release, drop) its audio with "mview set audio <RX> separate <TX|null>".
+        if (!output.SupportsMatrixSwitching && output.Device?.SupportsMultiview == true && IsAudioOnly(signalType))
+        {
+            RouteMultiviewAudio(inputSelector as INhdInputSlot, output);
+            return;
+        }
+
         if (inputSelector == null)
         {
             // A released route. Leave the decoder on its current stream rather than blanking it.
@@ -1009,6 +1017,27 @@ foreach (var endpointOutputPort in endpointOutputPorts)
 
         if (signalType.HasFlag(NhdRoutingSignalTypes.Serial))
             output.SetInputRoute(NhdRoutingSignalTypes.Serial, trackedInput);
+    }
+
+    private static bool IsAudioOnly(eRoutingSignalType signalType) =>
+        signalType.HasFlag(eRoutingSignalType.Audio) && !signalType.HasFlag(eRoutingSignalType.Video);
+
+    private void RouteMultiviewAudio(INhdInputSlot inputSlot, NhdMatrixOutput output)
+    {
+        var ctl = DeviceManager.AllDevices.OfType<NhdCtlPro>().FirstOrDefault();
+        if (ctl?.SessionManager == null)
+        {
+            this.LogError("NHD-CTL session manager is not available to route audio to multiview decoder '{key}'", output.Device.Key);
+            return;
+        }
+
+        // No input, or the clear input, drops the decoder's audio.
+        var tx = (inputSlot as NhdMatrixInput)?.Device;
+
+        this.LogInformation("Multiview audio: '{rx}' <- '{tx}'", output.Device.Key, tx?.Key ?? "none");
+
+        if (ctl.SessionManager.TrySetMultiviewSeparateAudio(this, output.Device, tx))
+            SetTrackedOutputRoutes(output, tx == null ? null : inputSlot, eRoutingSignalType.Audio);
     }
 
     private static string GetTxReference(INhdInputSlot inputSlot)

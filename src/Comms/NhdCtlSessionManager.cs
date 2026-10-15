@@ -203,6 +203,13 @@ namespace PepperDash.Essentials.Plugin.Comms
         private readonly Dictionary<string, MultiviewFullscreenReturnState> _fullscreenReturnStates = new Dictionary<string, MultiviewFullscreenReturnState>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, RecentFullscreenRoute> _recentFullscreenRoutes = new Dictionary<string, RecentFullscreenRoute>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, int> _pendingCustomWindowAudioApplies = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+        // Audio routed to a multiview decoder by endpoint key (TX API reference), and the decoders whose
+        // routed audio must be sent again once a newly applied layout is confirmed: a custom multiview
+        // layout leaves a decoder with no audio until "mview set audio" is sent (NetworkHD API).
+        private readonly Dictionary<string, string> _routedMultiviewAudio = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private readonly HashSet<string> _pendingRoutedMultiviewAudio = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private readonly object _routedMultiviewAudioLock = new object();
         private readonly Dictionary<string, Timer> _pendingVideoLostDebounceTimers = new Dictionary<string, Timer>(StringComparer.OrdinalIgnoreCase);
         private readonly object _videoLostDebounceLock = new object();
         private readonly HashSet<string> _subscribedNotificationReferences = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -510,10 +517,79 @@ namespace PepperDash.Essentials.Plugin.Comms
             {
                 // This is a runtime-computed layout, not a named preset/custom layout.
                 rxEndpoint.SetActiveCustomMVLayout(null);
+
+                // The new layout drops the decoder's audio; send the routed audio again once the
+                // layout is confirmed (FinalizePendingMviewInformationEntry).
+                lock (_routedMultiviewAudioLock)
+                {
+                    if (_routedMultiviewAudio.ContainsKey(rxEndpoint.Key))
+                        _pendingRoutedMultiviewAudio.Add(rxEndpoint.Key);
+                }
+
                 RequestMultiviewState(rxEndpoint, source, force: true);
             }
 
             return dynamicSent;
+        }
+
+        /// <summary>
+        /// Routes a transmitter's audio to a multiview decoder ("mview set audio &lt;RX&gt; separate &lt;TX&gt;"),
+        /// or drops the decoder's audio when <paramref name="txEndpoint"/> is null ("separate null").
+        /// "matrix audio set" does not apply to a decoder in multiview. The routed audio is sent again
+        /// after each dynamic layout applied to the decoder, since a new layout leaves it with no audio.
+        /// </summary>
+        public bool TrySetMultiviewSeparateAudio(IKeyed requestedBy, NhdBaseDevice rxEndpoint, NhdBaseDevice txEndpoint)
+        {
+            var source = requestedBy ?? _ctl;
+
+            if (rxEndpoint == null || !rxEndpoint.SupportsMultiview)
+            {
+                Debug.LogError("[{0}] Unable to route multiview audio: '{1}' is not a multiview decoder", source.Key, rxEndpoint?.Key);
+                return false;
+            }
+
+            var txReference = txEndpoint?.ApiEndpointReference;
+            lock (_routedMultiviewAudioLock)
+            {
+                _pendingRoutedMultiviewAudio.Remove(rxEndpoint.Key);
+                if (string.IsNullOrWhiteSpace(txReference))
+                    _routedMultiviewAudio.Remove(rxEndpoint.Key);
+                else
+                    _routedMultiviewAudio[rxEndpoint.Key] = txReference;
+            }
+
+            return SendMultiviewSeparateAudio(source, rxEndpoint, txReference);
+        }
+
+        private bool SendMultiviewSeparateAudio(IKeyed source, NhdBaseDevice rxEndpoint, string txReference)
+        {
+            var command = string.Format(
+                CultureInfo.InvariantCulture,
+                "mview set audio {0} separate {1}",
+                rxEndpoint.ApiEndpointReference,
+                string.IsNullOrWhiteSpace(txReference) ? "null" : txReference);
+
+            if (!NhdApiCommandSender.TrySend(source, command))
+                return false;
+
+            rxEndpoint.SetActiveMVAudioSeparateSource(string.IsNullOrWhiteSpace(txReference) ? null : txReference);
+            return true;
+        }
+
+        private void TryDispatchRoutedMultiviewAudioForEndpoint(NhdBaseDevice rxEndpoint)
+        {
+            if (rxEndpoint == null)
+                return;
+
+            string txReference;
+            lock (_routedMultiviewAudioLock)
+            {
+                if (!_pendingRoutedMultiviewAudio.Remove(rxEndpoint.Key)
+                    || !_routedMultiviewAudio.TryGetValue(rxEndpoint.Key, out txReference))
+                    return;
+            }
+
+            SendMultiviewSeparateAudio(_ctl, rxEndpoint, txReference);
         }
 
         public bool TryApplyMVPreset(IKeyed requestedBy, NhdBaseDevice rxEndpoint, string presetKey)
@@ -2384,6 +2460,7 @@ namespace PepperDash.Essentials.Plugin.Comms
             _pendingMviewEndpoint.SetMVRuntimeState(_pendingMviewMode, resolvedTiles);
             CaptureOrInferActiveLayout(_pendingMviewEndpoint);
             TryDispatchPendingCustomWindowAudioForEndpoint(_pendingMviewEndpoint);
+            TryDispatchRoutedMultiviewAudioForEndpoint(_pendingMviewEndpoint);
             TryDispatchPendingTileRouteForEndpoint(_pendingMviewEndpoint);
             TryDispatchPendingFullscreenRequestForEndpoint(_pendingMviewEndpoint);
             TryStartStartupProbeIfReady(_pendingMviewEndpoint);
